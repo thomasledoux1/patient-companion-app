@@ -1,9 +1,17 @@
 import React from 'react'
+import { Lato } from 'next/font/google'
 import './styles.css'
 
+const lato = Lato({
+  weight: ['400', '700'],
+  subsets: ['latin'],
+  variable: '--font-lato',
+  display: 'swap',
+})
+
 export const metadata = {
-  description: 'A blank template using Payload in a Next.js app.',
-  title: 'Payload Blank Template',
+  description: 'Patient Companion – your care overview, appointments, and health.',
+  title: 'Patient Companion',
 }
 
 export default async function RootLayout(props: { children: React.ReactNode }) {
@@ -11,7 +19,7 @@ export default async function RootLayout(props: { children: React.ReactNode }) {
 
   return (
     <html lang="en">
-      <body>
+      <body className={`${lato.variable} ${lato.className} min-h-screen`}>
         <main>{children}</main>
       </body>
     </html>
