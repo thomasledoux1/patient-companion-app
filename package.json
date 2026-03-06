@@ -63,6 +63,9 @@
     "pnpm": "^9 || ^10"
   },
   "pnpm": {
+    "overrides": {
+      "@payloadcms/ui": "3.78.0"
+    },
     "onlyBuiltDependencies": [
       "sharp",
       "esbuild",
