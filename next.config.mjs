@@ -4,6 +4,16 @@ import { withPayload } from '@payloadcms/next/withPayload'
 const nextConfig = {
   // Ensure Turso/libSQL packages are available in Vercel serverless (not bundled)
   serverExternalPackages: ['@libsql/client', 'libsql'],
+  images: {
+    remotePatterns: [
+      {
+        protocol: 'http',
+        hostname: 'localhost',
+        port: '3000',
+        pathname: '/**',
+      },
+    ],
+  },
   webpack: (webpackConfig) => {
     webpackConfig.resolve.extensionAlias = {
       '.cjs': ['.cts', '.cjs'],

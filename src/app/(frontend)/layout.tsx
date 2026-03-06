@@ -1,5 +1,6 @@
 import React from 'react'
 import { Lato } from 'next/font/google'
+import { BottomNav } from './components/BottomNav'
 import './styles.css'
 
 const lato = Lato({
@@ -19,8 +20,9 @@ export default async function RootLayout(props: { children: React.ReactNode }) {
 
   return (
     <html lang="en">
-      <body className={`${lato.variable} ${lato.className} min-h-screen`}>
-        <main>{children}</main>
+      <body className={`${lato.variable} ${lato.className} min-h-screen bg-background text-white`}>
+        <main className="pb-20">{children}</main>
+        <BottomNav />
       </body>
     </html>
   )

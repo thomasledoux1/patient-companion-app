@@ -10,8 +10,7 @@ function getPlainTextFromLexical(fullText: unknown): string {
   if (!root?.children?.length) return ''
   const parts: string[] = []
   for (const node of root.children) {
-    if (node == null || typeof node !== 'object' || !('children' in node))
-      continue
+    if (node == null || typeof node !== 'object' || !('children' in node)) continue
     const child = node as { children?: { text?: string }[] }
     for (const c of child.children ?? []) {
       if (c?.text) parts.push(c.text)
@@ -20,11 +19,7 @@ function getPlainTextFromLexical(fullText: unknown): string {
   return parts.join(' ')
 }
 
-export default async function TipDetailPage({
-  params,
-}: {
-  params: Promise<{ id: string }>
-}) {
+export default async function TipDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params
   const payload = await getPayload({ config: configPromise })
   const tip = await payload
@@ -38,13 +33,10 @@ export default async function TipDetailPage({
   if (!tip) notFound()
 
   const picture = tip.picture
-  const imageUrl =
-    typeof picture === 'object' && picture?.url ? picture.url : null
-  const imageAlt =
-    typeof picture === 'object' && picture?.alt ? picture.alt : tip.title
+  const imageUrl = typeof picture === 'object' && picture?.url ? picture.url : null
+  const imageAlt = typeof picture === 'object' && picture?.alt ? picture.alt : tip.title
 
-  const fullTextPlain =
-    getPlainTextFromLexical(tip.fullText) || tip.teaser
+  const fullTextPlain = getPlainTextFromLexical(tip.fullText) || tip.teaser
 
   return (
     <div className="min-h-screen bg-background">
@@ -52,7 +44,7 @@ export default async function TipDetailPage({
       <header className="relative flex w-full flex-col justify-end aspect-[1.72]">
         {imageUrl ? (
           <Image
-            src={imageUrl}
+            src={`${process.env.VERCEL_PROJECT_PRODUCTION_URL ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}` : 'http://localhost:3000'}${imageUrl}`}
             alt={imageAlt}
             fill
             className="object-cover"

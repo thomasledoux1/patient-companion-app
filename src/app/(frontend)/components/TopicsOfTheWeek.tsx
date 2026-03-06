@@ -87,7 +87,7 @@ export function TopicsOfTheWeek({ topics }: TopicsOfTheWeekProps) {
         <span className="text-xl font-bold text-white">Topics of the week</span>
       </div>
 
-      <ul className="bg-card-dark pl-4 py-4 overflow-scroll flex gap-2">
+      <ul className="bg-card-dark p-4 overflow-scroll flex gap-2">
         {topics.map((topic) => (
           <li key={topic.id}>
             <Link

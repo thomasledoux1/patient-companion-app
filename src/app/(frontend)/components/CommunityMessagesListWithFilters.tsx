@@ -27,6 +27,8 @@ export function CommunityMessagesListWithFilters({
   const [isPending, setIsPending] = useState(false)
 
   const runFilter = (searchValue: string, periodValue: Period) => {
+    setSearch(searchValue)
+    setPeriod(periodValue)
     setIsPending(true)
     const formData = new FormData()
     formData.set('search', searchValue)
