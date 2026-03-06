@@ -12,6 +12,16 @@ const nextConfig = {
         port: '3000',
         pathname: '/**',
       },
+      // Allow same-origin Payload media on Vercel (VERCEL_URL is set at build)
+      ...(process.env.VERCEL_URL
+        ? [
+            {
+              protocol: 'https',
+              hostname: process.env.VERCEL_URL,
+              pathname: '/api/**',
+            },
+          ]
+        : []),
     ],
   },
   webpack: (webpackConfig) => {
