@@ -48,3 +48,7 @@ node_modules/
 /playwright-report/
 /blob-report/
 /playwright/.cache/
+
+patient-companion-app.db
+patient-companion-app.db-shm
+patient-companion-app.db-wal

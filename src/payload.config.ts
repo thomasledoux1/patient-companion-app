@@ -9,6 +9,7 @@ import sharp from 'sharp'
 import { Users } from './collections/Users'
 import { Media } from './collections/Media'
 import { Tips } from './collections/Tips'
+import { CommunityMessages } from './collections/CommunityMessages'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -20,7 +21,7 @@ export default buildConfig({
       baseDir: path.resolve(dirname),
     },
   },
-  collections: [Users, Media, Tips],
+  collections: [Users, Media, Tips, CommunityMessages],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || '',
   typescript: {
@@ -28,7 +29,9 @@ export default buildConfig({
   },
   db: sqliteAdapter({
     client: {
+      // Local: file:./payload.db (or leave unset). Turso: libsql://<db>-<org>.turso.io
       url: process.env.DATABASE_URI || process.env.DATABASE_URL || 'file:./payload.db',
+      // Required for Turso; leave unset for local SQLite
       authToken: process.env.DATABASE_AUTH_TOKEN || undefined,
     },
   }),
@@ -39,6 +42,7 @@ export default buildConfig({
         users: { enabled: true },
         media: { enabled: true },
         tips: { enabled: true },
+        'community-messages': { enabled: true },
       },
     }),
   ],

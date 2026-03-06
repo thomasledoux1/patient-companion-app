@@ -14,10 +14,12 @@
   --color-accent-alt-hover: #a9255a;
   --color-background: #1a1a1f;
   --font-sans: var(--font-lato), system-ui, -apple-system, sans-serif;
+  --radius-sm: 0.375rem;
   --radius-md: 0.5rem;
   --radius-lg: 0.75rem;
   --radius-xl: 15px;
   --color-card: #2d2938;
+  --color-card-dark: #221f2b;
   --text-xl: 22px;
   --text-xl-leading: 26px;
   --text-xl-tracking: -0.53px;

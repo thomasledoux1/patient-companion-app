@@ -71,6 +71,7 @@ export interface Config {
     users: User;
     media: Media;
     tips: Tip;
+    'community-messages': CommunityMessage;
     'payload-mcp-api-keys': PayloadMcpApiKey;
     'payload-kv': PayloadKv;
     'payload-locked-documents': PayloadLockedDocument;
@@ -82,6 +83,7 @@ export interface Config {
     users: UsersSelect<false> | UsersSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
     tips: TipsSelect<false> | TipsSelect<true>;
+    'community-messages': CommunityMessagesSelect<false> | CommunityMessagesSelect<true>;
     'payload-mcp-api-keys': PayloadMcpApiKeysSelect<false> | PayloadMcpApiKeysSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
@@ -146,6 +148,10 @@ export interface PayloadMcpApiKeyAuthOperations {
  */
 export interface User {
   id: number;
+  /**
+   * Display name for community messages and comments.
+   */
+  name?: string | null;
   updatedAt: string;
   createdAt: string;
   email: string;
@@ -218,6 +224,36 @@ export interface Tip {
     };
     [k: string]: unknown;
   };
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "community-messages".
+ */
+export interface CommunityMessage {
+  id: number;
+  /**
+   * The authenticated user who wrote this message.
+   */
+  author: number | User;
+  title: string;
+  message: string;
+  /**
+   * Authenticated users who liked this message.
+   */
+  likes?: (number | User)[] | null;
+  /**
+   * Comments from authenticated users.
+   */
+  comments?:
+    | {
+        author: number | User;
+        body: string;
+        createdAt?: string | null;
+        id?: string | null;
+      }[]
+    | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -295,6 +331,24 @@ export interface PayloadMcpApiKey {
      */
     delete?: boolean | null;
   };
+  communityMessages?: {
+    /**
+     * Allow clients to find community-messages.
+     */
+    find?: boolean | null;
+    /**
+     * Allow clients to create community-messages.
+     */
+    create?: boolean | null;
+    /**
+     * Allow clients to update community-messages.
+     */
+    update?: boolean | null;
+    /**
+     * Allow clients to delete community-messages.
+     */
+    delete?: boolean | null;
+  };
   updatedAt: string;
   createdAt: string;
   enableAPIKey?: boolean | null;
@@ -337,6 +391,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'tips';
         value: number | Tip;
+      } | null)
+    | ({
+        relationTo: 'community-messages';
+        value: number | CommunityMessage;
       } | null)
     | ({
         relationTo: 'payload-mcp-api-keys';
@@ -399,6 +457,7 @@ export interface PayloadMigration {
  * via the `definition` "users_select".
  */
 export interface UsersSelect<T extends boolean = true> {
+  name?: T;
   updatedAt?: T;
   createdAt?: T;
   email?: T;
@@ -449,6 +508,26 @@ export interface TipsSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "community-messages_select".
+ */
+export interface CommunityMessagesSelect<T extends boolean = true> {
+  author?: T;
+  title?: T;
+  message?: T;
+  likes?: T;
+  comments?:
+    | T
+    | {
+        author?: T;
+        body?: T;
+        createdAt?: T;
+        id?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-mcp-api-keys_select".
  */
 export interface PayloadMcpApiKeysSelect<T extends boolean = true> {
@@ -472,6 +551,14 @@ export interface PayloadMcpApiKeysSelect<T extends boolean = true> {
         delete?: T;
       };
   tips?:
+    | T
+    | {
+        find?: T;
+        create?: T;
+        update?: T;
+        delete?: T;
+      };
+  communityMessages?:
     | T
     | {
         find?: T;
