@@ -44,7 +44,7 @@ export default async function TipDetailPage({ params }: { params: Promise<{ id: 
       <header className="relative flex w-full flex-col justify-end aspect-[1.72]">
         {imageUrl ? (
           <Image
-            src={`${process.env.VERCEL_PROJECT_PRODUCTION_URL ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}` : 'http://localhost:3000'}${imageUrl}`}
+            src={imageUrl}
             alt={imageAlt}
             fill
             className="object-cover"

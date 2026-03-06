@@ -44,7 +44,7 @@ export function TipTeaserCard({
       <div className="relative min-h-[200px] w-full">
         {imageUrl ? (
           <Image
-            src={`${process.env.VERCEL_PROJECT_PRODUCTION_URL ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}` : 'http://localhost:3000'}${imageUrl}`}
+            src={imageUrl}
             alt={imageAlt || title}
             fill
             className="object-cover"
