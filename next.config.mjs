@@ -5,23 +5,10 @@ const nextConfig = {
   // Ensure Turso/libSQL packages are available in Vercel serverless (not bundled)
   serverExternalPackages: ['@libsql/client', 'libsql'],
   images: {
-    remotePatterns: [
+    localPatterns: [
       {
-        protocol: 'http',
-        hostname: 'localhost',
-        port: '3000',
-        pathname: '/**',
+        pathname: '/api/media/file/**',
       },
-      // Allow same-origin Payload media on Vercel (VERCEL_URL is set at build)
-      ...(process.env.VERCEL_URL
-        ? [
-            {
-              protocol: 'https',
-              hostname: process.env.VERCEL_URL,
-              pathname: '/api/**',
-            },
-          ]
-        : []),
     ],
   },
   webpack: (webpackConfig) => {
