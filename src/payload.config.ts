@@ -11,6 +11,7 @@ import { Users } from './collections/Users'
 import { Media } from './collections/Media'
 import { Tips } from './collections/Tips'
 import { CommunityMessages } from './collections/CommunityMessages'
+import { AppointmentPreps } from './collections/AppointmentPreps'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -22,7 +23,7 @@ export default buildConfig({
       baseDir: path.resolve(dirname),
     },
   },
-  collections: [Users, Media, Tips, CommunityMessages],
+  collections: [Users, Media, Tips, CommunityMessages, AppointmentPreps],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || '',
   typescript: {
@@ -43,8 +44,9 @@ export default buildConfig({
         users: { enabled: true },
         media: { enabled: true },
         tips: { enabled: true },
-        'community-messages': { enabled: true },
-      },
+      'community-messages': { enabled: true },
+      'appointment-preps': { enabled: true },
+    },
     }),
     vercelBlobStorage({
       enabled: !!process.env.BLOB_READ_WRITE_TOKEN,

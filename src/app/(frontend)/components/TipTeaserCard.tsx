@@ -48,17 +48,17 @@ export function TipTeaserCard({
             alt={imageAlt || title}
             fill
             className="object-cover"
-            sizes="(max-width: 640px) 100vw, 400px"
+            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 400px"
           />
         ) : (
           <div className="absolute inset-0 bg-[#4a868a]/60" />
         )}
         <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent" />
-        <div className="absolute inset-0 flex flex-col justify-end gap-2 pb-4 pr-4 pt-[21px] pl-[25px]">
-          <h2 className="max-w-[222px] text-xl font-bold leading-tight text-white drop-shadow-sm">
+        <div className="absolute inset-0 flex flex-col justify-end gap-2 pb-4 pr-4 pt-[21px] pl-[25px] md:pl-6 md:pb-5 md:pr-6">
+          <h2 className="max-w-[222px] md:max-w-sm text-xl font-bold leading-tight text-white drop-shadow-sm md:text-2xl">
             {title}
           </h2>
-          <p className="max-w-[168px] text-base leading-[19px] text-white/95 drop-shadow-sm">
+          <p className="max-w-[168px] md:max-w-xs text-base leading-[19px] text-white/95 drop-shadow-sm md:max-w-sm">
             {teaser}
           </p>
         </div>

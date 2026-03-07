@@ -30,8 +30,8 @@ export default async function TipCategoryPage({
   const stateWithSearch = { ...initialState, search: '', period: 'week' as const }
 
   return (
-    <div className="min-h-screen bg-background p-4 text-white">
-      <div className="mx-auto max-w-2xl space-y-6">
+    <div className="min-h-screen bg-background px-4 py-6 text-white md:px-6 md:py-8">
+      <div className="mx-auto max-w-2xl space-y-6 md:max-w-4xl lg:max-w-5xl lg:px-0">
         <header>
           <Link
             href="/tips"

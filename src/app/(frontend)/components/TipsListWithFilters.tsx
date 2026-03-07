@@ -77,7 +77,7 @@ export function TipsListWithFilters({
         <p className="text-white/80">No tips found. Try a different period or search.</p>
       ) : tips.length > 0 ? (
         <div className={isPending ? 'animate-pulse' : ''} aria-busy={isPending}>
-          <ul className="flex list-none flex-col gap-6 p-0">
+          <ul className="flex list-none flex-col gap-6 p-0 md:grid md:grid-cols-2 md:gap-6 lg:gap-8">
             {tips.map((tip) => {
               const picture = tip.picture
               const imageUrl = typeof picture === 'object' && picture?.url ? picture.url : null

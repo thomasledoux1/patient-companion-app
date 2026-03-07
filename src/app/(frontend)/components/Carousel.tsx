@@ -85,21 +85,22 @@ const items = [
 
 export function Carousel() {
   return (
-    <div className="carousel-scroll flex overflow-y-hidden -mr-4">
+    <div className="carousel-scroll flex overflow-y-hidden -mr-4 md:mr-0 md:flex-wrap md:gap-4 md:overflow-visible">
       {items.map(({ label, color, icon, href }) => (
-        <Link className="contents" href={href ?? '/'} key={label}>
-          {icon}
-          <div key={label} className="flex shrink-0 flex-col items-center gap-1 px-2 pb-2">
-            <div
-              className="flex size-[50px] items-center justify-center rounded-full text-white"
-              style={{ backgroundColor: color }}
-            >
-              {icon}
-            </div>
-            <span className="text-[12px] font-medium leading-[14px] tracking-[-0.41px] text-white/90">
-              {label}
-            </span>
+        <Link
+          className="flex shrink-0 flex-col items-center gap-1 px-2 pb-2 md:shrink-0"
+          href={href ?? '/'}
+          key={label}
+        >
+          <div
+            className="flex size-[50px] items-center justify-center rounded-full text-white md:size-14"
+            style={{ backgroundColor: color }}
+          >
+            {icon}
           </div>
+          <span className="text-[12px] font-medium leading-[14px] tracking-[-0.41px] text-white/90 md:text-sm">
+            {label}
+          </span>
         </Link>
       ))}
     </div>

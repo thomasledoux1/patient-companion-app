@@ -1,8 +1,10 @@
 import Link from 'next/link'
+import { headers } from 'next/headers'
 import { notFound } from 'next/navigation'
 import React from 'react'
 import { getPayload } from 'payload'
 import configPromise from '@payload-config'
+import { CommentForm } from './CommentForm'
 
 function getRelativeTime(isoDate: string): string {
   const date = new Date(isoDate)
@@ -29,15 +31,22 @@ export default async function CommunityMessageDetailPage({
 }) {
   const { id } = await params
   const payload = await getPayload({ config: configPromise })
-  const message = await payload
-    .findByID({
-      collection: 'community-messages',
-      id: Number(id),
-      depth: 1,
-    })
-    .catch(() => null)
+  const messageId = Number(id)
+
+  const [message, authResult] = await Promise.all([
+    payload
+      .findByID({
+        collection: 'community-messages',
+        id: messageId,
+        depth: 1,
+      })
+      .catch(() => null),
+    payload.auth({ headers: (await headers()) as Headers, canSetHeaders: false }),
+  ])
 
   if (!message) notFound()
+
+  const isLoggedIn = Boolean(authResult.user)
 
   const author =
     message.author && typeof message.author === 'object' ? message.author : null
@@ -48,7 +57,7 @@ export default async function CommunityMessageDetailPage({
 
   return (
     <div className="min-h-screen bg-background">
-      <div className="mx-auto max-w-2xl px-4 pb-12 pt-4 text-white">
+      <div className="mx-auto max-w-2xl px-4 pb-12 pt-4 text-white md:max-w-3xl md:px-6 lg:px-8">
         <Link
           href="/community"
           className="mb-6 inline-flex items-center gap-2 text-white/80 no-underline hover:text-white"
@@ -111,6 +120,12 @@ export default async function CommunityMessageDetailPage({
                 </ul>
               </div>
             )}
+          </section>
+        )}
+
+        {isLoggedIn && (
+          <section className="mt-8 rounded-xl border border-white/10 bg-card p-6">
+            <CommentForm messageId={messageId} />
           </section>
         )}
       </div>

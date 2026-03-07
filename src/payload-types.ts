@@ -72,6 +72,7 @@ export interface Config {
     media: Media;
     tips: Tip;
     'community-messages': CommunityMessage;
+    'appointment-preps': AppointmentPrep;
     'payload-mcp-api-keys': PayloadMcpApiKey;
     'payload-kv': PayloadKv;
     'payload-locked-documents': PayloadLockedDocument;
@@ -84,6 +85,7 @@ export interface Config {
     media: MediaSelect<false> | MediaSelect<true>;
     tips: TipsSelect<false> | TipsSelect<true>;
     'community-messages': CommunityMessagesSelect<false> | CommunityMessagesSelect<true>;
+    'appointment-preps': AppointmentPrepsSelect<false> | AppointmentPrepsSelect<true>;
     'payload-mcp-api-keys': PayloadMcpApiKeysSelect<false> | PayloadMcpApiKeysSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
@@ -258,6 +260,31 @@ export interface CommunityMessage {
   createdAt: string;
 }
 /**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "appointment-preps".
+ */
+export interface AppointmentPrep {
+  id: number;
+  author: number | User;
+  /**
+   * Optional label, e.g. "Cardiologist visit" or "Annual check-up".
+   */
+  title?: string | null;
+  /**
+   * What the patient shared (symptoms, worries, goals) used to generate the questions.
+   */
+  concerns: string;
+  /**
+   * Generated questions to bring to the appointment.
+   */
+  questions: {
+    question: string;
+    id?: string | null;
+  }[];
+  updatedAt: string;
+  createdAt: string;
+}
+/**
  * API keys control which collections, resources, tools, and prompts MCP clients can access
  *
  * This interface was referenced by `Config`'s JSON-Schema
@@ -349,6 +376,24 @@ export interface PayloadMcpApiKey {
      */
     delete?: boolean | null;
   };
+  appointmentPreps?: {
+    /**
+     * Allow clients to find appointment-preps.
+     */
+    find?: boolean | null;
+    /**
+     * Allow clients to create appointment-preps.
+     */
+    create?: boolean | null;
+    /**
+     * Allow clients to update appointment-preps.
+     */
+    update?: boolean | null;
+    /**
+     * Allow clients to delete appointment-preps.
+     */
+    delete?: boolean | null;
+  };
   updatedAt: string;
   createdAt: string;
   enableAPIKey?: boolean | null;
@@ -395,6 +440,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'community-messages';
         value: number | CommunityMessage;
+      } | null)
+    | ({
+        relationTo: 'appointment-preps';
+        value: number | AppointmentPrep;
       } | null)
     | ({
         relationTo: 'payload-mcp-api-keys';
@@ -528,6 +577,23 @@ export interface CommunityMessagesSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "appointment-preps_select".
+ */
+export interface AppointmentPrepsSelect<T extends boolean = true> {
+  author?: T;
+  title?: T;
+  concerns?: T;
+  questions?:
+    | T
+    | {
+        question?: T;
+        id?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-mcp-api-keys_select".
  */
 export interface PayloadMcpApiKeysSelect<T extends boolean = true> {
@@ -559,6 +625,14 @@ export interface PayloadMcpApiKeysSelect<T extends boolean = true> {
         delete?: T;
       };
   communityMessages?:
+    | T
+    | {
+        find?: T;
+        create?: T;
+        update?: T;
+        delete?: T;
+      };
+  appointmentPreps?:
     | T
     | {
         find?: T;

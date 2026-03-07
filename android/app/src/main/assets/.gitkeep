@@ -1,0 +1,2 @@
+# Keeps assets dir so Capacitor can write capacitor.config.json and capacitor.plugins.json on sync.
+# Those files are gitignored; this dir is required for cap sync when using server.url.

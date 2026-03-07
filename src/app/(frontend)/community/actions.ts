@@ -2,6 +2,7 @@
 
 import { headers } from 'next/headers'
 import { getPayload } from 'payload'
+import { revalidatePath } from 'next/cache'
 import configPromise from '@payload-config'
 
 export type CreateCommunityMessageResult =
@@ -151,4 +152,73 @@ export async function filterCommunityMessagesAction(
   const period = ((formData.get('period') as string) ?? 'week') as Period
   const { messages, total } = await getFilteredCommunityMessages(search, period)
   return { messages, total, search, period }
+}
+
+export type AddCommentResult =
+  | { ok: true }
+  | { ok: false; authRequired: true }
+  | { ok: false; error: string }
+
+export async function addCommentToCommunityMessage(
+  _prev: unknown,
+  formData: FormData,
+): Promise<AddCommentResult> {
+  const payload = await getPayload({ config: configPromise })
+  const headersList = await headers()
+  const authResult = await payload.auth({
+    headers: headersList as Headers,
+    canSetHeaders: false,
+  })
+
+  if (!authResult.user) {
+    return { ok: false, authRequired: true }
+  }
+
+  const messageIdRaw = formData.get('messageId')
+  const messageId =
+    typeof messageIdRaw === 'string' ? parseInt(messageIdRaw, 10) : Number(messageIdRaw)
+  const body = (formData.get('body') as string)?.trim()
+
+  if (!Number.isFinite(messageId) || !body) {
+    return { ok: false, error: 'Comment text is required.' }
+  }
+
+  try {
+    const doc = await payload.findByID({
+      collection: 'community-messages',
+      id: messageId,
+      depth: 0,
+    })
+
+    const existingComments = Array.isArray(doc.comments) ? doc.comments : []
+    const authorId = authResult.user.id
+    const newComments = [
+      ...existingComments.map((c) => {
+        const row = c as { id?: string | null; author: number | { id: number }; body: string }
+        return {
+          ...(row.id != null ? { id: row.id } : {}),
+          author: typeof row.author === 'object' && row.author != null ? row.author.id : row.author,
+          body: row.body,
+        }
+      }),
+      { author: authorId, body },
+    ]
+
+    await payload.update({
+      collection: 'community-messages',
+      id: messageId,
+      data: { comments: newComments },
+      user: authResult.user,
+      overrideAccess: false,
+    })
+
+    revalidatePath(`/community/${messageId}`)
+    return { ok: true }
+  } catch (err) {
+    const message =
+      err && typeof err === 'object' && 'message' in err
+        ? String((err as { message: unknown }).message)
+        : 'Something went wrong.'
+    return { ok: false, error: message }
+  }
 }

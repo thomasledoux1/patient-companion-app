@@ -87,12 +87,12 @@ export function TopicsOfTheWeek({ topics }: TopicsOfTheWeekProps) {
         <span className="text-xl font-bold text-white">Topics of the week</span>
       </div>
 
-      <ul className="bg-card-dark p-4 overflow-scroll flex gap-2">
+      <ul className="bg-card-dark p-4 overflow-scroll flex gap-2 md:overflow-visible md:grid md:grid-cols-2 md:gap-4 lg:grid-cols-1">
         {topics.map((topic) => (
-          <li key={topic.id}>
+          <li key={topic.id} className="min-w-[290px] md:min-w-0">
             <Link
               href={`/community/${topic.id}`}
-              className="flex min-w-[290px] gap-3 p-4 h-full rounded-sm bg-card no-underline text-inherit transition-opacity hover:opacity-90"
+              className="flex gap-3 p-4 h-full rounded-sm bg-card no-underline text-inherit transition-opacity hover:opacity-90"
             >
               <div className="flex size-10 shrink-0 items-center justify-center overflow-hidden rounded-full">
                 <TopicIcon id={topic.id} />

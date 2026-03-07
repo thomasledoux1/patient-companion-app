@@ -70,8 +70,8 @@ export default async function TipDetailPage({ params }: { params: Promise<{ id: 
       </header>
 
       {/* Content: dark section with description */}
-      <section className="px-6 py-8">
-        <p className="max-w-2xl text-left text-base leading-relaxed text-white/95">
+      <section className="px-6 py-8 md:px-8 lg:mx-auto lg:max-w-3xl lg:px-10">
+        <p className="max-w-2xl text-left text-base leading-relaxed text-white/95 md:text-lg">
           {fullTextPlain}
         </p>
       </section>

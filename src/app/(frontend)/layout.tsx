@@ -21,8 +21,12 @@ export default async function RootLayout(props: { children: React.ReactNode }) {
   return (
     <html lang="en">
       <body className={`${lato.variable} ${lato.className} min-h-screen bg-background text-white`}>
-        <main className="pb-20">{children}</main>
-        <BottomNav />
+        <div className="lg:flex lg:min-h-screen">
+          <BottomNav />
+          <main className="min-h-screen pb-20 lg:flex-1 lg:pb-8 lg:pl-56">
+            {children}
+          </main>
+        </div>
       </body>
     </html>
   )
