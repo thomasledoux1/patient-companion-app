@@ -126,3 +126,33 @@ export function PrepareIcon({
     </svg>
   )
 }
+
+/**
+ * Profile / user icon. Default size 24×24.
+ */
+export function ProfileIcon({
+  className = '',
+  width = defaultSize,
+  height = defaultSize,
+  fill = 'currentColor',
+  ariaHidden = true,
+}: IconProps) {
+  return (
+    <svg
+      width={width}
+      height={height}
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke={fill}
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      xmlns="http://www.w3.org/2000/svg"
+      className={className}
+      aria-hidden={ariaHidden}
+    >
+      <circle cx="12" cy="8" r="4" />
+      <path d="M20 21a8 8 0 0 0-16 0" />
+    </svg>
+  )
+}

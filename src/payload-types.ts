@@ -154,6 +154,10 @@ export interface User {
    * Display name for community messages and comments.
    */
   name?: string | null;
+  /**
+   * Profile picture shown on community messages and your profile.
+   */
+  profilePicture?: (number | null) | Media;
   updatedAt: string;
   createdAt: string;
   email: string;
@@ -507,6 +511,7 @@ export interface PayloadMigration {
  */
 export interface UsersSelect<T extends boolean = true> {
   name?: T;
+  profilePicture?: T;
   updatedAt?: T;
   createdAt?: T;
   email?: T;

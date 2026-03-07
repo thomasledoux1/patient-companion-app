@@ -2,13 +2,14 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { CommunityIcon, HomeIcon, PrepareIcon, TipsIcon } from './Icons'
+import { CommunityIcon, HomeIcon, PrepareIcon, ProfileIcon, TipsIcon } from './Icons'
 
 const navItems = [
   { href: '/', label: 'Home', icon: HomeIcon },
   { href: '/tips', label: 'Tips', icon: TipsIcon },
   { href: '/community', label: 'Community', icon: CommunityIcon },
   { href: '/prepare', label: 'Prepare', icon: PrepareIcon },
+  { href: '/profile', label: 'Profile', icon: ProfileIcon },
 ] as const
 
 export function BottomNav() {
@@ -34,10 +35,13 @@ export function BottomNav() {
                   ? 'text-surface-elevated'
                   : 'text-white/70 hover:text-white/90'
               }`}
+              aria-label={label}
               aria-current={isActive ? 'page' : undefined}
             >
               <Icon />
-              <span>{label}</span>
+              <span className="hidden lg:inline" aria-hidden>
+                {label}
+              </span>
             </Link>
           )
         })}

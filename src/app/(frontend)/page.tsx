@@ -33,7 +33,7 @@ export default async function HomePage() {
     }),
     payload.find({
       collection: 'community-messages',
-      depth: 1,
+      depth: 2,
       limit: 20,
       sort: '-createdAt',
       where: {
@@ -63,11 +63,17 @@ export default async function HomePage() {
   const topicsOfTheWeek = communityResult.docs.map((doc) => {
     const author = doc.author && typeof doc.author === 'object' ? doc.author : null
     const authorName = author?.name || author?.email || 'Someone'
+    const profilePicture = author?.profilePicture
+    const authorAvatarUrl =
+      profilePicture && typeof profilePicture === 'object' && profilePicture?.url
+        ? profilePicture.url
+        : null
     return {
       id: doc.id,
       title: doc.title,
       message: doc.message,
       authorName,
+      authorAvatarUrl,
       createdAt: doc.createdAt,
     }
   })

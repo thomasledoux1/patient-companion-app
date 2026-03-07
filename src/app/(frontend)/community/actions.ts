@@ -79,6 +79,7 @@ export type CommunityMessageForList = {
   title: string
   message: string
   authorName: string
+  authorAvatarUrl: string | null
   createdAt: string
 }
 
@@ -87,18 +88,31 @@ function toCommunityMessageForList(doc: {
   title: string
   message: string
   createdAt: string
-  author?: number | { id: number; name?: string | null; email?: string | null }
+  author?:
+    | number
+    | {
+        id: number
+        name?: string | null
+        email?: string | null
+        profilePicture?: number | { url?: string | null } | null
+      }
 }): CommunityMessageForList {
   const author =
     doc.author && typeof doc.author === 'object'
       ? doc.author
       : null
   const authorName = author?.name ?? author?.email ?? 'Someone'
+  const profilePicture = author?.profilePicture
+  const authorAvatarUrl =
+    profilePicture && typeof profilePicture === 'object' && profilePicture?.url
+      ? profilePicture.url
+      : null
   return {
     id: doc.id,
     title: doc.title,
     message: doc.message,
     authorName,
+    authorAvatarUrl,
     createdAt: doc.createdAt,
   }
 }
@@ -126,7 +140,7 @@ export async function getFilteredCommunityMessages(
 
   const { docs, totalDocs } = await payload.find({
     collection: 'community-messages',
-    depth: 1,
+    depth: 2,
     limit: 100,
     sort: '-createdAt',
     // eslint-disable-next-line @typescript-eslint/no-explicit-any

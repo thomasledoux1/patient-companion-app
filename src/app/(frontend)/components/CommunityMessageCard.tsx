@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import React from 'react'
 import type { CommunityMessageForList } from '../community/actions'
+import { Avatar } from './Avatar'
 
 function getRelativeTime(isoDate: string): string {
   const date = new Date(isoDate)
@@ -20,33 +21,6 @@ function getRelativeTime(isoDate: string): string {
   return `posted ${Math.floor(diffDays / 30)} month${Math.floor(diffDays / 30) === 1 ? '' : 's'} ago`
 }
 
-function TopicIcon({ id }: { id: number }) {
-  const clipId = `community-card-icon-${id}`
-  return (
-    <svg
-      width="40"
-      height="40"
-      viewBox="0 0 40 40"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-      className="size-10 shrink-0"
-    >
-      <defs>
-        <clipPath id={clipId}>
-          <circle cx="20" cy="20" r="20" />
-        </clipPath>
-      </defs>
-      <g clipPath={`url(#${clipId})`}>
-        <path d="M0 0H20V20H0V0Z" fill="#EB498A" />
-        <path d="M20 0H40V20H20V0Z" fill="#E8E8E8" />
-        <path d="M0 20H20V40H0V20Z" fill="#63B3B9" />
-        <path d="M20 20H40V40H20V20Z" fill="#7BC9A4" />
-        <path d="M20 12L28 28H12L20 12Z" fill="white" fillOpacity="0.95" />
-      </g>
-    </svg>
-  )
-}
-
 type CommunityMessageCardProps = {
   message: CommunityMessageForList
   href: string
@@ -58,9 +32,7 @@ export function CommunityMessageCard({ message, href }: CommunityMessageCardProp
       href={href}
       className="flex gap-3 rounded-xl border border-white/10 bg-card px-4 py-4 text-left no-underline transition-colors hover:bg-card/90 hover:border-white/20"
     >
-      <div className="flex size-10 shrink-0 items-center justify-center overflow-hidden rounded-full">
-        <TopicIcon id={message.id} />
-      </div>
+      <Avatar src={message.authorAvatarUrl} name={message.authorName} size="md" />
       <div className="min-w-0 flex-1">
         <p className="text-sm text-white/70">
           {getRelativeTime(message.createdAt)}

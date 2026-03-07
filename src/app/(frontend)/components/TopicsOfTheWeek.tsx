@@ -1,11 +1,13 @@
 import Link from 'next/link'
 import React from 'react'
+import { Avatar } from './Avatar'
 
 export type TopicItem = {
   id: number
   title: string
   message: string
   authorName: string
+  authorAvatarUrl?: string | null
   createdAt: string
 }
 
@@ -29,33 +31,6 @@ function getRelativeTime(isoDate: string): string {
   if (diffDays < 30)
     return `posted ${Math.floor(diffDays / 7)} week${Math.floor(diffDays / 7) === 1 ? '' : 's'} ago`
   return `posted ${Math.floor(diffDays / 30)} month${Math.floor(diffDays / 30) === 1 ? '' : 's'} ago`
-}
-
-function TopicIcon({ id }: { id: number }) {
-  const clipId = `topic-icon-${id}`
-  return (
-    <svg
-      width="40"
-      height="40"
-      viewBox="0 0 40 40"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-      className="size-10 shrink-0"
-    >
-      <defs>
-        <clipPath id={clipId}>
-          <circle cx="20" cy="20" r="20" />
-        </clipPath>
-      </defs>
-      <g clipPath={`url(#${clipId})`}>
-        <path d="M0 0H20V20H0V0Z" fill="#EB498A" />
-        <path d="M20 0H40V20H20V0Z" fill="#E8E8E8" />
-        <path d="M0 20H20V40H0V20Z" fill="#63B3B9" />
-        <path d="M20 20H40V40H20V20Z" fill="#7BC9A4" />
-        <path d="M20 12L28 28H12L20 12Z" fill="white" fillOpacity="0.95" />
-      </g>
-    </svg>
-  )
 }
 
 export function TopicsOfTheWeek({ topics }: TopicsOfTheWeekProps) {
@@ -94,9 +69,11 @@ export function TopicsOfTheWeek({ topics }: TopicsOfTheWeekProps) {
               href={`/community/${topic.id}`}
               className="flex gap-3 p-4 h-full rounded-sm bg-card no-underline text-inherit transition-opacity hover:opacity-90"
             >
-              <div className="flex size-10 shrink-0 items-center justify-center overflow-hidden rounded-full">
-                <TopicIcon id={topic.id} />
-              </div>
+              <Avatar
+                src={topic.authorAvatarUrl ?? null}
+                name={topic.authorName}
+                size="md"
+              />
               <div className="min-w-0 flex-1">
                 <p className="text-sm text-white/70">
                   {getRelativeTime(topic.createdAt)}

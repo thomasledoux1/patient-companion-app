@@ -4,6 +4,7 @@ import { notFound } from 'next/navigation'
 import React from 'react'
 import { getPayload } from 'payload'
 import configPromise from '@payload-config'
+import { Avatar } from '../../components/Avatar'
 import { CommentForm } from './CommentForm'
 
 function getRelativeTime(isoDate: string): string {
@@ -38,7 +39,7 @@ export default async function CommunityMessageDetailPage({
       .findByID({
         collection: 'community-messages',
         id: messageId,
-        depth: 1,
+        depth: 2,
       })
       .catch(() => null),
     payload.auth({ headers: (await headers()) as Headers, canSetHeaders: false }),
@@ -51,6 +52,11 @@ export default async function CommunityMessageDetailPage({
   const author =
     message.author && typeof message.author === 'object' ? message.author : null
   const authorName = author?.name ?? author?.email ?? 'Someone'
+  const profilePicture = author?.profilePicture
+  const authorAvatarUrl =
+    profilePicture && typeof profilePicture === 'object' && profilePicture?.url
+      ? profilePicture.url
+      : null
 
   const comments = message.comments ?? []
   const likesCount = Array.isArray(message.likes) ? message.likes.length : 0
@@ -66,15 +72,18 @@ export default async function CommunityMessageDetailPage({
           ← Back to community
         </Link>
 
-        <header className="mb-8">
-          <p className="text-sm text-white/70">
-            {getRelativeTime(message.createdAt)}
-            <span className="mx-1.5 inline-block size-1 rounded-full bg-white/50" aria-hidden />
-            {authorName}
-          </p>
-          <h1 className="mt-2 font-bold text-2xl leading-tight text-white sm:text-3xl">
-            {message.title}
-          </h1>
+        <header className="mb-8 flex gap-4">
+          <Avatar src={authorAvatarUrl} name={authorName} size="md" />
+          <div className="min-w-0 flex-1">
+            <p className="text-sm text-white/70">
+              {getRelativeTime(message.createdAt)}
+              <span className="mx-1.5 inline-block size-1 rounded-full bg-white/50" aria-hidden />
+              {authorName}
+            </p>
+            <h1 className="mt-2 font-bold text-2xl leading-tight text-white sm:text-3xl">
+              {message.title}
+            </h1>
+          </div>
         </header>
 
         <section className="rounded-xl border border-white/10 bg-card p-6">
