@@ -23,17 +23,13 @@ export function BottomNav() {
       <div className="mx-auto flex max-w-2xl items-center justify-around px-2 py-2 lg:mx-0 lg:mt-6 lg:max-w-none lg:flex-col lg:items-stretch lg:gap-1 lg:px-3 lg:py-0">
         {navItems.map(({ href, label, icon: Icon }) => {
           const isActive =
-            href === '/'
-              ? pathname === '/'
-              : pathname === href || pathname.startsWith(href + '/')
+            href === '/' ? pathname === '/' : pathname === href || pathname.startsWith(href + '/')
           return (
             <Link
               key={href}
               href={href}
               className={`flex flex-col items-center gap-0.5 rounded-lg px-4 py-2 text-xs font-medium transition-colors lg:flex-row lg:gap-3 lg:px-4 lg:py-3 lg:text-sm ${
-                isActive
-                  ? 'text-surface-elevated'
-                  : 'text-white/70 hover:text-white/90'
+                isActive ? 'text-surface-elevated' : 'text-white/70 hover:text-white/90'
               }`}
               aria-label={label}
               aria-current={isActive ? 'page' : undefined}

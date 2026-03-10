@@ -28,5 +28,13 @@ export const Users: CollectionConfig = {
         description: 'Profile picture shown on community messages and your profile.',
       },
     },
+    {
+      name: 'diagnosedWithMG',
+      type: 'checkbox',
+      defaultValue: false,
+      admin: {
+        description: 'User has indicated they are diagnosed with Myasthenia Gravis.',
+      },
+    },
   ],
 }

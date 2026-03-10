@@ -68,7 +68,7 @@ export function PrepareClient({ initialPreps }: PrepareClientProps) {
   }
 
   return (
-    <div className="min-h-screen bg-background text-white">
+    <div className="lg:min-h-screen bg-background text-white">
       <div className="mx-auto max-w-2xl px-4 py-6 pb-24 md:max-w-3xl md:px-6 md:py-8 lg:max-w-4xl lg:px-8">
         <header className="mb-8">
           <h1 className="text-2xl font-bold tracking-tight">Prepare for your appointment</h1>
@@ -110,7 +110,8 @@ export function PrepareClient({ initialPreps }: PrepareClientProps) {
           <section className="mt-8 rounded-xl border border-white/10 bg-card p-6">
             <h2 className="text-lg font-bold text-white">Questions to bring</h2>
             <p className="mt-1 text-sm text-white/70">
-              You can copy these or save them in the app{typeof savedId === 'number' ? ' (saved).' : '.'}
+              You can copy these or save them in the app
+              {typeof savedId === 'number' ? ' (saved).' : '.'}
             </p>
             <ol className="mt-4 list-decimal space-y-3 pl-5">
               {questions.map((q, i) => (
@@ -125,9 +126,7 @@ export function PrepareClient({ initialPreps }: PrepareClientProps) {
         {initialPreps.length > 0 && (
           <section className="mt-10">
             <h2 className="text-lg font-bold text-white">Previous preps</h2>
-            <p className="mt-1 text-sm text-white/70">
-              Your saved appointment question lists
-            </p>
+            <p className="mt-1 text-sm text-white/70">Your saved appointment question lists</p>
             <ul className="mt-4 list-none space-y-3 p-0">
               {initialPreps.map((prep) => (
                 <li key={prep.id}>
@@ -136,9 +135,7 @@ export function PrepareClient({ initialPreps }: PrepareClientProps) {
                     className="block rounded-xl border border-white/10 bg-card p-4 no-underline text-white transition-opacity hover:opacity-90"
                   >
                     <p className="text-sm text-white/70">{formatDate(prep.createdAt)}</p>
-                    <p className="mt-1 font-medium text-white">
-                      {truncate(prep.concerns, 80)}
-                    </p>
+                    <p className="mt-1 font-medium text-white">{truncate(prep.concerns, 80)}</p>
                     <p className="mt-1 text-sm text-white/60">
                       {prep.questions.length} question{prep.questions.length !== 1 ? 's' : ''}
                     </p>

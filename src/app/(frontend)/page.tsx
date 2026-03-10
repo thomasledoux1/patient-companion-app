@@ -1,8 +1,8 @@
 import Link from 'next/link'
-import { headers } from 'next/headers'
 import { getPayload } from 'payload'
 import React from 'react'
 import configPromise from '@payload-config'
+import { getAuthOrRedirect } from './lib/auth'
 import { Carousel } from './components/Carousel'
 import { TipTeaserCard } from './components/TipTeaserCard'
 import { TopicsOfTheWeek } from './components/TopicsOfTheWeek'
@@ -15,12 +15,8 @@ function oneWeekAgoISO(): string {
 }
 
 export default async function HomePage() {
+  const authResult = await getAuthOrRedirect('/')
   const payload = await getPayload({ config: configPromise })
-  const headersList = await headers()
-  const authResult = await payload.auth({
-    headers: headersList as Headers,
-    canSetHeaders: false,
-  })
   const user = authResult.user as { name?: string | null; email?: string } | null | undefined
   const displayName = user?.name ?? user?.email ?? 'Anonymous'
 
@@ -79,7 +75,7 @@ export default async function HomePage() {
   })
 
   return (
-    <div className="min-h-screen bg-background px-4 py-6 text-white md:px-6 md:py-8 lg:mx-auto lg:max-w-5xl lg:px-8">
+    <div className="lg:min-h-screen bg-background px-4 py-6 text-white md:px-6 md:py-8 lg:mx-auto lg:max-w-5xl lg:px-8">
       <div className="flex flex-col gap-y-6 md:gap-y-8">
         <div>
           <h1>Hi, {displayName}.</h1>
@@ -98,9 +94,7 @@ export default async function HomePage() {
             </span>
             <div className="min-w-0 flex-1">
               <span className="font-bold">Latest prep</span>
-              <p className="mt-0.5 line-clamp-2 text-sm text-white/70">
-                {latestPrep.concerns}
-              </p>
+              <p className="mt-0.5 line-clamp-2 text-sm text-white/70">{latestPrep.concerns}</p>
               <p className="mt-1 text-xs text-white/50">
                 {new Date(latestPrep.createdAt).toLocaleDateString(undefined, {
                   day: 'numeric',

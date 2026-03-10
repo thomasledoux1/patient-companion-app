@@ -4,11 +4,10 @@ import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import React, { useState } from 'react'
 
-type LoginFormProps = {
-  redirectTo: string
-}
+const inputClass =
+  'w-full rounded-2xl border border-white/10 bg-white/10 px-6 py-4 text-lg text-white placeholder:text-white/50 focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/30'
 
-export function LoginForm({ redirectTo }: LoginFormProps) {
+export function LoginForm({ redirectTo }: { redirectTo: string }) {
   const router = useRouter()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -28,7 +27,9 @@ export function LoginForm({ redirectTo }: LoginFormProps) {
       })
       if (!res.ok) {
         const data = await res.json().catch(() => ({}))
-        setError((data as { message?: string })?.message ?? 'Invalid email or password.')
+        setError(
+          (data as { message?: string })?.message ?? 'Invalid email or password.'
+        )
         setIsPending(false)
         return
       }
@@ -41,9 +42,9 @@ export function LoginForm({ redirectTo }: LoginFormProps) {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4 rounded-xl border border-white/10 bg-card p-6">
+    <form onSubmit={handleSubmit} className="mt-8 flex flex-1 flex-col gap-6">
       <div>
-        <label htmlFor="login-email" className="mb-1 block text-sm font-medium text-white/90">
+        <label htmlFor="login-email" className="sr-only">
           Email
         </label>
         <input
@@ -53,11 +54,12 @@ export function LoginForm({ redirectTo }: LoginFormProps) {
           onChange={(e) => setEmail(e.target.value)}
           required
           autoComplete="email"
-          className="w-full rounded border border-white/20 bg-white/10 px-3 py-2 text-white placeholder:text-white/50 focus:border-white/40 focus:outline-none focus:ring-1 focus:ring-white/30"
+          placeholder="email"
+          className={inputClass}
         />
       </div>
       <div>
-        <label htmlFor="login-password" className="mb-1 block text-sm font-medium text-white/90">
+        <label htmlFor="login-password" className="sr-only">
           Password
         </label>
         <input
@@ -67,24 +69,25 @@ export function LoginForm({ redirectTo }: LoginFormProps) {
           onChange={(e) => setPassword(e.target.value)}
           required
           autoComplete="current-password"
-          className="w-full rounded border border-white/20 bg-white/10 px-3 py-2 text-white placeholder:text-white/50 focus:border-white/40 focus:outline-none focus:ring-1 focus:ring-white/30"
+          placeholder="password"
+          className={inputClass}
         />
       </div>
+
       {error && <p className="text-sm text-red-400">{error}</p>}
+
       <button
         type="submit"
         disabled={isPending}
-        className="w-full rounded bg-[var(--color-accent-alt)] py-3 text-sm font-bold uppercase tracking-wide text-white transition-opacity hover:opacity-90 disabled:opacity-50"
+        className="mt-auto w-full rounded-xl bg-primary py-4 text-lg font-bold text-white transition-opacity hover:opacity-90 disabled:opacity-50"
       >
         {isPending ? 'Signing in…' : 'Sign in'}
       </button>
+
       <p className="text-center text-sm text-white/70">
-        <Link href="/" className="text-white/90 underline hover:text-white">
-          Back to home
-        </Link>
-        {' · '}
+        Don&apos;t have an account?{' '}
         <Link href="/register" className="text-white/90 underline hover:text-white">
-          Create an account
+          Create one
         </Link>
       </p>
     </form>

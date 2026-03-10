@@ -1,22 +1,13 @@
-import { headers } from 'next/headers'
 import { getPayload } from 'payload'
-import { redirect } from 'next/navigation'
 import React from 'react'
 import configPromise from '@payload-config'
+import { getAuthOrRedirect } from '../lib/auth'
 import { ProfileActions } from './ProfileActions'
 import { ProfilePictureForm } from './ProfilePictureForm'
 
 export default async function ProfilePage() {
+  const authResult = await getAuthOrRedirect('/profile')
   const payload = await getPayload({ config: configPromise })
-  const headersList = await headers()
-  const authResult = await payload.auth({
-    headers: headersList as Headers,
-    canSetHeaders: false,
-  })
-
-  if (!authResult.user) {
-    redirect('/login?redirect=' + encodeURIComponent('/profile'))
-  }
 
   const userWithDepth = await payload.findByID({
     collection: 'users',
@@ -37,7 +28,7 @@ export default async function ProfilePage() {
       : null
 
   return (
-    <div className="min-h-screen bg-background text-white">
+    <div className="lg:min-h-screen bg-background text-white">
       <div className="mx-auto max-w-sm">
         {/* Top section: avatar, name, subtitle – lighter card background */}
         <section className="bg-card px-4 pb-6 pt-10">

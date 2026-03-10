@@ -1,6 +1,6 @@
 import React from 'react'
 import { Lato } from 'next/font/google'
-import { BottomNav } from './components/BottomNav'
+import { LayoutWithNav } from './components/LayoutWithNav'
 import './styles.css'
 
 const lato = Lato({
@@ -20,13 +20,10 @@ export default async function RootLayout(props: { children: React.ReactNode }) {
 
   return (
     <html lang="en">
-      <body className={`${lato.variable} ${lato.className} min-h-screen bg-background text-white`}>
-        <div className="lg:flex lg:min-h-screen">
-          <BottomNav />
-          <main className="min-h-screen pb-20 lg:flex-1 lg:pb-8 lg:pl-56">
-            {children}
-          </main>
-        </div>
+      <body
+        className={`${lato.variable} ${lato.className} lg:min-h-screen bg-background text-white`}
+      >
+        <LayoutWithNav>{children}</LayoutWithNav>
       </body>
     </html>
   )

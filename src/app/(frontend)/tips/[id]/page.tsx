@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import React from 'react'
 import configPromise from '@payload-config'
+import { getAuthOrRedirect } from '../../lib/auth'
 
 function getPlainTextFromLexical(fullText: unknown): string {
   const root = (fullText as { root?: { children?: unknown[] } })?.root
@@ -21,6 +22,7 @@ function getPlainTextFromLexical(fullText: unknown): string {
 
 export default async function TipDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params
+  await getAuthOrRedirect(`/tips/${id}`)
   const payload = await getPayload({ config: configPromise })
   const tip = await payload
     .findByID({
@@ -39,7 +41,7 @@ export default async function TipDetailPage({ params }: { params: Promise<{ id: 
   const fullTextPlain = getPlainTextFromLexical(tip.fullText) || tip.teaser
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="lg:min-h-screen bg-background">
       {/* Hero: full-width background image with back button and title overlay */}
       <header className="relative flex w-full flex-col justify-end aspect-[1.72]">
         {imageUrl ? (

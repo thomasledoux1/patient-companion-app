@@ -1,10 +1,10 @@
 import Link from 'next/link'
-import { headers } from 'next/headers'
 import { notFound } from 'next/navigation'
 import React from 'react'
 import { getPayload } from 'payload'
 import configPromise from '@payload-config'
 import { Avatar } from '../../components/Avatar'
+import { getAuthOrRedirect } from '../../lib/auth'
 import { CommentForm } from './CommentForm'
 
 function getRelativeTime(isoDate: string): string {
@@ -31,26 +31,22 @@ export default async function CommunityMessageDetailPage({
   params: Promise<{ id: string }>
 }) {
   const { id } = await params
+  await getAuthOrRedirect(`/community/${id}`)
   const payload = await getPayload({ config: configPromise })
   const messageId = Number(id)
-
-  const [message, authResult] = await Promise.all([
-    payload
-      .findByID({
-        collection: 'community-messages',
-        id: messageId,
-        depth: 2,
-      })
-      .catch(() => null),
-    payload.auth({ headers: (await headers()) as Headers, canSetHeaders: false }),
-  ])
+  const message = await payload
+    .findByID({
+      collection: 'community-messages',
+      id: messageId,
+      depth: 2,
+    })
+    .catch(() => null)
 
   if (!message) notFound()
 
-  const isLoggedIn = Boolean(authResult.user)
+  const isLoggedIn = true
 
-  const author =
-    message.author && typeof message.author === 'object' ? message.author : null
+  const author = message.author && typeof message.author === 'object' ? message.author : null
   const authorName = author?.name ?? author?.email ?? 'Someone'
   const profilePicture = author?.profilePicture
   const authorAvatarUrl =
@@ -62,7 +58,7 @@ export default async function CommunityMessageDetailPage({
   const likesCount = Array.isArray(message.likes) ? message.likes.length : 0
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="lg:min-h-screen bg-background">
       <div className="mx-auto max-w-2xl px-4 pb-12 pt-4 text-white md:max-w-3xl md:px-6 lg:px-8">
         <Link
           href="/community"
@@ -101,15 +97,11 @@ export default async function CommunityMessageDetailPage({
             )}
             {comments.length > 0 && (
               <div className={likesCount > 0 ? 'mt-4' : ''}>
-                <h2 className="text-lg font-semibold text-white">
-                  Comments ({comments.length})
-                </h2>
+                <h2 className="text-lg font-semibold text-white">Comments ({comments.length})</h2>
                 <ul className="mt-3 list-none space-y-3 p-0">
                   {comments.map((comment, i) => {
                     const commentAuthor =
-                      comment.author && typeof comment.author === 'object'
-                        ? comment.author
-                        : null
+                      comment.author && typeof comment.author === 'object' ? comment.author : null
                     const commentAuthorName =
                       commentAuthor?.name ?? commentAuthor?.email ?? 'Someone'
                     return (
@@ -117,12 +109,8 @@ export default async function CommunityMessageDetailPage({
                         key={comment.id ?? i}
                         className="rounded-lg border border-white/10 bg-white/5 px-4 py-3"
                       >
-                        <p className="text-sm font-medium text-white/90">
-                          {commentAuthorName}
-                        </p>
-                        <p className="mt-1 text-sm leading-relaxed text-white/85">
-                          {comment.body}
-                        </p>
+                        <p className="text-sm font-medium text-white/90">{commentAuthorName}</p>
+                        <p className="mt-1 text-sm leading-relaxed text-white/85">{comment.body}</p>
                       </li>
                     )
                   })}

@@ -4,11 +4,14 @@ import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import React, { useState } from 'react'
 
+const inputClass = 'w-full rounded-2xl text-white bg-white/29 py-4 px-6 text-lg'
+
 export function RegisterForm() {
   const router = useRouter()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [name, setName] = useState('')
+  const [diagnosedWithMG, setDiagnosedWithMG] = useState(true)
   const [error, setError] = useState('')
   const [isPending, setIsPending] = useState(false)
 
@@ -21,13 +24,22 @@ export function RegisterForm() {
         method: 'POST',
         credentials: 'include',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password, name: name || undefined }),
+        body: JSON.stringify({
+          email,
+          password,
+          name: name || undefined,
+          diagnosedWithMG,
+        }),
       })
       if (!res.ok) {
-        const data = await res.json().catch(() => ({}))
-        const msg = (data as { errors?: Array<{ message?: string }> })?.errors?.[0]?.message
-          ?? (data as { message?: string })?.message
-          ?? 'Registration failed. This email may already be in use.'
+        const data = (await res.json().catch(() => ({}))) as {
+          errors?: Array<{ message?: string }>
+          message?: string
+        }
+        const msg =
+          data.errors?.[0]?.message ??
+          data.message ??
+          'Registration failed. This email may already be in use.'
         setError(msg)
         setIsPending(false)
         return
@@ -41,10 +53,24 @@ export function RegisterForm() {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4 rounded-xl border border-white/10 bg-card p-6">
+    <form onSubmit={handleSubmit} className="mt-8 flex flex-1 flex-col gap-6">
       <div>
-        <label htmlFor="register-email" className="mb-1 block text-sm font-medium text-white/90">
-          Email
+        <label htmlFor="register-name" className="sr-only">
+          Name
+        </label>
+        <input
+          id="register-name"
+          type="text"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          autoComplete="name"
+          placeholder="name"
+          className={inputClass}
+        />
+      </div>
+      <div>
+        <label htmlFor="register-email" className="sr-only">
+          Email address
         </label>
         <input
           id="register-email"
@@ -53,25 +79,12 @@ export function RegisterForm() {
           onChange={(e) => setEmail(e.target.value)}
           required
           autoComplete="email"
-          className="w-full rounded border border-white/20 bg-white/10 px-3 py-2 text-white placeholder:text-white/50 focus:border-white/40 focus:outline-none focus:ring-1 focus:ring-white/30"
+          placeholder="email"
+          className={inputClass}
         />
       </div>
       <div>
-        <label htmlFor="register-name" className="mb-1 block text-sm font-medium text-white/90">
-          Name <span className="text-white/50">(optional)</span>
-        </label>
-        <input
-          id="register-name"
-          type="text"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          autoComplete="name"
-          placeholder="Display name"
-          className="w-full rounded border border-white/20 bg-white/10 px-3 py-2 text-white placeholder:text-white/50 focus:border-white/40 focus:outline-none focus:ring-1 focus:ring-white/30"
-        />
-      </div>
-      <div>
-        <label htmlFor="register-password" className="mb-1 block text-sm font-medium text-white/90">
+        <label htmlFor="register-password" className="sr-only">
           Password
         </label>
         <input
@@ -82,21 +95,45 @@ export function RegisterForm() {
           required
           autoComplete="new-password"
           minLength={8}
-          className="w-full rounded border border-white/20 bg-white/10 px-3 py-2 text-white placeholder:text-white/50 focus:border-white/40 focus:outline-none focus:ring-1 focus:ring-white/30"
+          placeholder="password"
+          className={inputClass}
         />
       </div>
+
+      <div className="flex items-center justify-between gap-4 flex-col-reverse">
+        <label htmlFor="register-mg" className="cursor-pointer text-base text-white/70">
+          I am diagnosed with MG
+        </label>
+        <button
+          type="button"
+          role="switch"
+          id="register-mg"
+          aria-checked={diagnosedWithMG}
+          onClick={() => setDiagnosedWithMG((v) => !v)}
+          className="relative h-8 w-14 shrink-0 rounded-full border-2 border-white bg-transparent transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-background"
+        >
+          <span
+            className={`absolute top-1 left-1 h-5 w-5 rounded-full bg-primary transition-transform ${
+              diagnosedWithMG ? 'translate-x-6' : 'translate-x-0'
+            }`}
+          />
+        </button>
+      </div>
+
       {error && <p className="text-sm text-red-400">{error}</p>}
+
       <button
         type="submit"
         disabled={isPending}
-        className="w-full rounded bg-[var(--color-accent-alt)] py-3 text-sm font-bold uppercase tracking-wide text-white transition-opacity hover:opacity-90 disabled:opacity-50"
+        className="mt-auto w-full rounded-xl bg-primary py-4 text-lg font-bold text-white transition-opacity hover:opacity-90 disabled:opacity-50"
       >
-        {isPending ? 'Creating account…' : 'Create account'}
+        {isPending ? 'Creating account…' : 'Get started'}
       </button>
+
       <p className="text-center text-sm text-white/70">
         Already have an account?{' '}
         <Link href="/login" className="text-white/90 underline hover:text-white">
-          Log in
+          Sign in
         </Link>
       </p>
     </form>

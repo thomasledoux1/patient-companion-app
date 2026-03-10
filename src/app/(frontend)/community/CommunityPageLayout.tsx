@@ -1,7 +1,7 @@
 'use client'
 
 import React from 'react'
-import { PageLayout } from '../components/PageLayout'
+import { StructuredPageLayout } from '../components/PageLayout'
 import { CommunityMessagesListWithFilters } from '../components/CommunityMessagesListWithFilters'
 import type { FilterCommunityMessagesState } from './actions'
 
@@ -13,7 +13,7 @@ export function CommunityPageLayout({ initialState }: CommunityPageLayoutProps) 
   return (
     <CommunityMessagesListWithFilters initialState={initialState}>
       {(filters, list) => (
-        <PageLayout
+        <StructuredPageLayout
           backgroundColor="#EB498A"
           title="Community"
           subtitle="Topics and messages from the community. Search and filter by date."

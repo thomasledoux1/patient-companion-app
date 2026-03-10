@@ -9,15 +9,18 @@
   --color-border: #63b3b9;
   --color-muted: #4a868a;
   --color-text: #4d24c5;
+  --color-text-light: #7c5dd8;
   --color-accent: #612df6;
   --color-accent-alt: #eb498a;
   --color-accent-alt-hover: #a9255a;
   --color-background: #1a1a1f;
+  --color-tertiary: #52d1ab;
   --font-sans: var(--font-lato), system-ui, -apple-system, sans-serif;
   --radius-sm: 0.375rem;
   --radius-md: 0.5rem;
   --radius-lg: 0.75rem;
   --radius-xl: 15px;
+  --radius-2xl: 18px;
   --color-card: #2d2938;
   --color-card-dark: #221f2b;
   --text-xl: 22px;
@@ -26,24 +29,29 @@
   --text-2xl: 26px;
   --text-2xl-leading: 30px;
   --text-2xl-tracking: -0.53px;
+  --text-3xl: 30px;
+  --text-3xl-leading: 40px;
+  --text-3xl-tracking: 0;
   --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
   --shadow-card: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
 }
 
-h1 {
-  @apply font-bold text-[34px] leading-[40px] tracking-[-0.82px];
-}
+@layer base {
+  h1 {
+    @apply font-bold text-[34px] leading-[40px] tracking-[-0.82px];
+  }
 
-.subtitle {
-  @apply text-[20px] leading-[24px] tracking-[-0.48px];
-}
+  .subtitle {
+    @apply text-[20px] leading-[24px] tracking-[-0.48px];
+  }
 
-/* Hide scrollbar for carousel while keeping scroll */
-.carousel-scroll {
-  overflow-x: scroll;
-  -ms-overflow-style: none;
-  scrollbar-width: none;
-}
-.carousel-scroll::-webkit-scrollbar {
-  display: none;
+  /* Hide scrollbar for carousel while keeping scroll */
+  .carousel-scroll {
+    overflow-x: scroll;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .carousel-scroll::-webkit-scrollbar {
+    display: none;
+  }
 }

@@ -1,8 +1,8 @@
 import Link from 'next/link'
-import { headers } from 'next/headers'
 import { getPayload } from 'payload'
 import { notFound } from 'next/navigation'
 import configPromise from '@payload-config'
+import { getAuthOrRedirect } from '../../lib/auth'
 
 function formatDate(iso: string): string {
   const d = new Date(iso)
@@ -13,20 +13,10 @@ function formatDate(iso: string): string {
   })
 }
 
-export default async function PrepDetailPage({
-  params,
-}: {
-  params: Promise<{ id: string }>,
-}) {
+export default async function PrepDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params
+  const authResult = await getAuthOrRedirect(`/prepare/${id}`)
   const payload = await getPayload({ config: configPromise })
-  const headersList = await headers()
-  const authResult = await payload.auth({
-    headers: headersList as Headers,
-    canSetHeaders: false,
-  })
-
-  if (!authResult.user) notFound()
 
   const prep = await payload
     .findByID({
@@ -43,7 +33,7 @@ export default async function PrepDetailPage({
   const questions = prep.questions ?? []
 
   return (
-    <div className="min-h-screen bg-background text-white">
+    <div className="lg:min-h-screen bg-background text-white">
       <div className="mx-auto max-w-2xl px-4 py-6 pb-24 md:max-w-3xl md:px-6 md:py-8 lg:max-w-4xl lg:px-8">
         <Link
           href="/prepare"

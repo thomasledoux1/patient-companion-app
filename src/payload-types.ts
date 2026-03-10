@@ -158,6 +158,10 @@ export interface User {
    * Profile picture shown on community messages and your profile.
    */
   profilePicture?: (number | null) | Media;
+  /**
+   * User has indicated they are diagnosed with Myasthenia Gravis.
+   */
+  diagnosedWithMG?: boolean | null;
   updatedAt: string;
   createdAt: string;
   email: string;
@@ -512,6 +516,7 @@ export interface PayloadMigration {
 export interface UsersSelect<T extends boolean = true> {
   name?: T;
   profilePicture?: T;
+  diagnosedWithMG?: T;
   updatedAt?: T;
   createdAt?: T;
   email?: T;
