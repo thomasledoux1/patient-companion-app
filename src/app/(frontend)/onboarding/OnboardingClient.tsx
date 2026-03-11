@@ -3,7 +3,7 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { PageLayout } from '../components/PageLayout'
 import onboarding1 from './onboarding-1.png'
 import onboarding3 from './onboarding-3.png'
@@ -56,6 +56,32 @@ export function OnboardingClient() {
   const router = useRouter()
   const [step, setStep] = useState(0)
 
+  useEffect(() => {
+    const metaName = 'theme-color'
+    let meta = document.querySelector<HTMLMetaElement>(`meta[name="${metaName}"]`)
+
+    if (!meta) {
+      meta = document.createElement('meta')
+      meta.name = metaName
+      document.head.appendChild(meta)
+    }
+
+    const rootStyle = getComputedStyle(document.documentElement)
+    let color: string
+
+    if (step === 1) {
+      color = rootStyle.getPropertyValue('--color-text').trim() || '#1A1A1F'
+    } else if (step === 2) {
+      color = rootStyle.getPropertyValue('--color-tertiary').trim() || '#63B3B9'
+    } else if (step === 3) {
+      color = rootStyle.getPropertyValue('--color-surface-elevated').trim() || '#ADDBE2'
+    } else {
+      color = rootStyle.getPropertyValue('--color-background').trim() || '#000000'
+    }
+
+    meta.setAttribute('content', color)
+  }, [step])
+
   function goHome() {
     setOnboardingDone()
     router.push('/')
@@ -80,7 +106,7 @@ export function OnboardingClient() {
   const isLastStep = step === 3
 
   return (
-    <div className="flex lg:min-h-screen flex-col bg-background text-white">
+    <div className="flex flex-col bg-background text-white lg:min-h-screen lg:items-center lg:justify-center lg:py-8">
       {/* Header: Back, Logo, Skip (screens 2–4); step 1 purple, step 2 teal to match content */}
       {showHeaderNav && (
         <header
@@ -116,18 +142,18 @@ export function OnboardingClient() {
       {/* Step 0: Welcome – no header nav, logo + welcome + graphic + buttons */}
       {step === 0 && (
         <>
-          <div className="flex flex-1 flex-col px-4 pt-4 overflow-x-hidden">
+          <div className="flex flex-1 flex-col px-4 pt-4 overflow-x-hidden md:flex-row md:items-center md:justify-between md:px-8 lg:mx-auto lg:w-full lg:max-w-5xl lg:px-12">
             <p className="text-center text-2xl font-bold tracking-tight text-white">iMGine</p>
             <h1 className="mt-4 py-7 text-3xl font-bold leading-tight tracking-tight text-white">
               Hello there,
               <br />
               welcome to iMGine.
             </h1>
-            <div className="relative h-[300px]">
+            <div className="relative mt-6 h-[300px] md:mt-0 md:h-[360px] lg:h-[420px]">
               <div className="size-20 absolute -left-12 rounded-full bg-text" />
               <div className="absolute left-16 top-20 size-10 rounded-full bg-surface-elevated" />
               <div className="absolute bottom-16 left-12 size-30 rounded-full bg-tertiary z-10" />
-              <div className="size-[300px] absolute -right-28 rounded-full overflow-hidden">
+              <div className="size-[260px] absolute -right-20 rounded-full overflow-hidden md:size-[300px] lg:size-[340px]">
                 <Image
                   src={onboarding1}
                   alt="Hand writing on a notebook"
@@ -137,17 +163,17 @@ export function OnboardingClient() {
               </div>
             </div>
           </div>
-          <div className="flex flex-shrink-0 flex-col gap-3 px-4 pb-10 pt-6">
+          <div className="flex shrink-0 flex-col gap-3 px-4 pb-10 pt-6 md:flex-row md:items-center md:gap-4 md:px-8 lg:mx-auto lg:w-full lg:max-w-5xl lg:px-12">
             <button
               type="button"
               onClick={() => setStep(1)}
-              className="w-full rounded-xl bg-primary py-4 text-lg font-bold text-white transition-opacity hover:opacity-90"
+              className="w-full rounded-xl bg-primary py-4 text-lg font-bold text-white transition-opacity hover:opacity-90 md:flex-1"
             >
               Get Started
             </button>
             <Link
               href="/login"
-              className="block w-full rounded-xl border-2 border-white/30 py-4 text-center text-lg font-bold text-white transition-opacity hover:opacity-90"
+              className="block w-full rounded-xl border-2 border-white/30 py-4 text-center text-lg font-bold text-white transition-opacity hover:opacity-90 md:flex-1"
             >
               Sign In
             </Link>

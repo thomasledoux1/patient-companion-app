@@ -15,7 +15,7 @@ export function LayoutWithNav({ children }: { children: React.ReactNode }) {
   }
 
   return (
-    <div className="lg:flex lg:lg:min-h-screen">
+    <div className="lg:flex lg:min-h-screen">
       <BottomNav />
       <main className="lg:min-h-screen pb-20 lg:flex-1 lg:pb-8 lg:pl-56">{children}</main>
     </div>

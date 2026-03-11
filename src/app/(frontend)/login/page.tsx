@@ -10,7 +10,7 @@ export default async function LoginPage({ searchParams }: Props) {
   const redirectTo = redirect && redirect.startsWith('/') ? redirect : '/community'
 
   return (
-    <div className="flex min-h-screen flex-col bg-background text-white lg:min-h-screen">
+    <div className="flex flex-col bg-background text-white lg:min-h-screen">
       <header className="flex shrink-0 items-center px-4 py-4">
         <span className="w-10" aria-hidden />
         <span className="flex-1 text-center text-lg font-bold tracking-tight text-white">
