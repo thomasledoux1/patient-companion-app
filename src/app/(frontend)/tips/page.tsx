@@ -1,10 +1,10 @@
 import React from 'react'
-import type { Metadata } from 'next'
+import type { Viewport } from 'next'
 import { getAuthOrRedirect } from '../lib/auth'
 import { getLatestTipPerCategory } from './queries'
 import { TipsPageLayout } from './TipsPageLayout'
 
-export const metadata: Metadata = {
+export const viewport: Viewport = {
   themeColor: '#63B3B9',
 }
 

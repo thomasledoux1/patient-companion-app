@@ -1,10 +1,10 @@
 import React from 'react'
-import type { Metadata } from 'next'
+import type { Viewport } from 'next'
 import { getAuthOrRedirect } from '../lib/auth'
 import { getFilteredCommunityMessages } from './actions'
 import { CommunityPageLayout } from './CommunityPageLayout'
 
-export const metadata: Metadata = {
+export const viewport: Viewport = {
   themeColor: '#EB498A',
 }
 
