@@ -4,6 +4,11 @@ import configPromise from '@payload-config'
 import { getAuthOrRedirect } from '../lib/auth'
 import { ProfileActions } from './ProfileActions'
 import { ProfilePictureForm } from './ProfilePictureForm'
+import { Viewport } from 'next'
+
+export const viewport: Viewport = {
+  themeColor: '#2D2938',
+}
 
 export default async function ProfilePage() {
   const authResult = await getAuthOrRedirect('/profile')
